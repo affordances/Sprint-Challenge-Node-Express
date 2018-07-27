@@ -32,16 +32,16 @@ router.get('/:id/actions', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     if (!req.body.name) {
-      res.status(400).json({ message: "Please enter a name." });
+      return res.status(400).json({ message: "Please enter a name." });
     }
     if (!req.body.description) {
-      res.status(400).json({ message: "Please enter a description." });
+      return res.status(400).json({ message: "Please enter a description." });
     }
     if (req.body.name.length > 128) {
-      res.status(400).json({ message: "Name must be less than 128 characters." });
+      return res.status(400).json({ message: "Name must be less than 128 characters." });
     }
     const newProject = await projects.insert(req.body);
-    res.status(200).json(newProject);
+    res.status(201).json(newProject);
   } catch (error) {
     res.status(500).json({ message: "The project could not be saved." });
   }
@@ -50,13 +50,13 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     if (!req.body.name) {
-      res.status(400).json({ message: "Please enter a name." });
+      return res.status(400).json({ message: "Please enter a name." });
     }
     if (!req.body.description) {
-      res.status(400).json({ message: "Please enter a description." });
+      return res.status(400).json({ message: "Please enter a description." });
     }
     if (req.body.name.length > 128) {
-      res.status(400).json({ message: "Name must be less than 128 characters." });
+      return res.status(400).json({ message: "Name must be less than 128 characters." });
     }
     const project = await projects.update(req.params.id, req.body);
     res.status(200).json(project);
@@ -68,7 +68,6 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const project = await projects.remove(req.params.id);
-    console.log(project);
     if (project === 0) {
       res.status(404).json({ message: "Project does not exist." });
       return;
